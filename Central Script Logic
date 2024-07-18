@@ -31,8 +31,17 @@ export function beforeRender(delta) {
     } else if (currentTime - lastPassiveTime >= 60000) {
       switchToMode("shutdown");
     }
-  } else if (currentMode === "interactive-forwards" || currentMode === "interactive-backwards") {
-    if (frequency === 100) {
+  } else if (currentMode === "interactive-forwards") {
+    if (frequency < 100) {
+      switchToMode("interactive-backwards");
+    } else if (frequency === 100) {
+      switchToMode("interactive-passive");
+      lastPassiveTime = Date.now();
+    }
+  } else if (currentMode === "interactive-backwards") {
+    if (frequency > 100) {
+      switchToMode("interactive-forwards");
+    } else if (frequency === 100) {
       switchToMode("interactive-passive");
       lastPassiveTime = Date.now();
     }
